@@ -5,7 +5,8 @@ This repository contains Python code for analyzing and forecasting weather data 
 The analysis is performed on a dataset named "seattle-weather.csv", which likely contains historical weather data for Seattle. The dataset includes information such as date, precipitation, temperature, wind speed, and weather conditions.
 
 ## Code Overview
-### Data Loading and Exploration: The code loads the dataset into a pandas DataFrame and provides an overview of the data by displaying the first few rows, summary statistics, and information about the columns and their data types.
+### Data Loading and Exploration: 
+The code loads the dataset into a pandas DataFrame and provides an overview of the data by displaying the first few rows, summary statistics, and information about the columns and their data types.
 
 ### Data Cleaning: 
 Data cleaning operations are performed to ensure data integrity. Missing values are handled using the dropna() function, and columns are renamed for clarity.
