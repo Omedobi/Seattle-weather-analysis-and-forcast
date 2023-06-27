@@ -7,13 +7,17 @@ The analysis is performed on a dataset named "seattle-weather.csv", which likely
 ## Code Overview
 ### Data Loading and Exploration: The code loads the dataset into a pandas DataFrame and provides an overview of the data by displaying the first few rows, summary statistics, and information about the columns and their data types.
 
-### Data Cleaning: Data cleaning operations are performed to ensure data integrity. Missing values are handled using the dropna() function, and columns are renamed for clarity.
+### Data Cleaning: 
+Data cleaning operations are performed to ensure data integrity. Missing values are handled using the dropna() function, and columns are renamed for clarity.
 
-### Data Transformation: The code performs data transformation by calculating additional columns such as mean temperature and dew point based on existing temperature data and a predefined relative humidity value.
+### Data Transformation: 
+The code performs data transformation by calculating additional columns such as mean temperature and dew point based on existing temperature data and a predefined relative humidity value.
 
-### Data Visualization: Visualizations are generated using matplotlib.pyplot and plotly.express libraries. Line plots are created to visualize the humidity, wind speed, and mean temperature trends over a certain period. Scatter plots explore the relationship between temperature and humidity. Heatmaps and line plots analyze temperature changes over the years.
+### Data Visualization: 
+Visualizations are generated using matplotlib.pyplot and plotly.express libraries. Line plots are created to visualize the humidity, wind speed, and mean temperature trends over a certain period. Scatter plots explore the relationship between temperature and humidity. Heatmaps and line plots analyze temperature changes over the years.
 
-### Weather Forecasting: The code utilizes the Facebook Prophet model, a powerful time series forecasting technique, to forecast future weather conditions. The dataset is prepared by renaming columns and converting the date column to the required format. The Prophet model is trained on the data, and forecasts are made for future periods.
+### Weather Forecasting: 
+The code utilizes the Facebook Prophet model, a powerful time series forecasting technique, to forecast future weather conditions. The dataset is prepared by renaming columns and converting the date column to the required format. The Prophet model is trained on the data, and forecasts are made for future periods.
 
 ## Usage
 To use this code, follow these steps:
