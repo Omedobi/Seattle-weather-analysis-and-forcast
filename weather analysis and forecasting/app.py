@@ -1,124 +1,91 @@
 import streamlit as st
 import pandas as pd
 import logging
-import numpy as np
 from prophet import Prophet
-from prophet.plot import plot_plotly, plot_components_plotly
+from prophet.plot import plot_plotly
 import xgboost as xgb
-import plotly.express as px
-import matplotlib.pyplot as plt
 from joblib import load
 from sklearn.preprocessing import LabelEncoder
 
-#configure logging
+# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-
-#load model
-@st.cache_resource
 def load_models():
-    model_paths = [
-        'saved_model/Prophet_model.joblib',
-        'saved_model/xgb_model.joblib'
-    ]
-    models = []
-    for path in model_paths:
-        model_key = path.split('/')[-1].split('.')[0]
+    model_paths = {
+        'Prophet_model': 'saved_model/Prophet_model.joblib',
+        'xgb_model': 'saved_model/xgb_model.joblib'
+    }
+    models = {}
+    for key, path in model_paths.items():
         try:
-            models[model_key] = load(path)
-            logging.info(f"Model {model_key} loaded successfully from {path}")
+            models[key] = load(path)
+            logging.info(f"Model {key} loaded successfully.")
         except Exception as e:
-            logging.error(f"Failed to load model {model_key} from {path}: {e}")
-            st.error(f'Error loading model {model_key} from {path}: {e}')
-            models[model_key] = None
+            models[key] = None
+            logging.error(f"Failed to load model {key}: {e}")
+            st.error(f"Failed to load {key}. Please check the logs.")
     return models
 
-@st.cache_data
-#load data
 def load_data():
-    data = pd.read_parquet('data/seattle-weather.pq')
-    forecast_data = pd.read_parquet('data/forecast-data.pq')
-    return data , forecast_data
-
-    
- #data preprocessing
-def handle_data(data:pd.DataFrame) -> tuple:
-    label_encoder = LabelEncoder()
-    data_cols = data.select_dtypes(include=['object']).columns
-    for col in data_cols:
-        data[col] = label_encoder.fit_transform(data[col])
-    return data, label_encoder
- 
-            
-# prediction
-def prophet_prediction(forecast_data, periods):
-    
-    """Fit the Prophet model and make predictions for the specified number of periods.
-
-    Args:
-        forecast_data (pd.DataFrame): DataFrame containing the data for forecasting. 
-                                      Must contain 'ds' (datestamp) and 'y' (value) columns.
-        periods (int): Number of future periods to forecast.
-
-    Returns:
-        Tuple[Prophet, pd.DataFrame]: The fitted Prophet model and the forecast DataFrame.
-    """
     try:
-        model = Prophet()
-        model.fit(forecast_data)
-        future = model.make_future_dataframe(periods=periods)
-        forecast = model.predict(future)
-        return model, forecast
+        data = pd.read_parquet('data/seattle-weather.pq')
+        forecast_data = pd.read_parquet('data/forecast-data.pq')
+        return data, forecast_data
     except Exception as e:
-        logging.error(f'Error in Prophet prediction: {e}')
-        st.error(f'error during forecasting: {e}')
+        logging.error(f"Error loading data: {e}")
+        st.error("Failed to load data. Please check the logs.")
         return None, None
 
-def xgb_prediction(data, label_encoder):
-    try:
-        X = data[['precipitation', 'wind_speed', 'dew_point', 'mean_temp', 'humidity', 'year', 'month']]
-        models = load_models()
-        xgb_model = models[1]
-        if xgb_model is not None:
-            xgb_pred = xgb_model.predict(X)
-            preds = label_encoder.inverse_transform(xgb_pred.astype(int))
-            logging.info(f"XGBoost predict completed")
-            return preds
-        else:
-            st.error('XGBoost model is not loaded')
-            return None
-    except Exception as e:
-        logging.error(f"Error in predicting weather condition using XGBoost: {e}")
-        st.error(f'Error predicting weather condition: {e}')
-        return None
+def handle_data(data):
+    label_encoder = LabelEncoder()
+    if data is not None:
+        for col in data.select_dtypes(include=['object']).columns:
+            data[col] = label_encoder.fit_transform(data[col])
+    return data, label_encoder
 
-#The user interface
-
-st.title('Seattle Weather Forecast App')
-if st.button('Load Data'):
-    with st.spinner('Loading data...'):
-        data, forecast_data = load_data()
-        data, label_encoder = handle_data(data)
-        st.success('Data loaded successfully!')
-
-if data is not None:
-    st.write('Weather data:', data)
-
-st.header('Prophet Forecast')
-periods = st.slider('Select number of days to forecast', 1, 365, 30)
-model, forecast = prophet_prediction(forecast_data, periods)
-if forecast is not None:
-    st.write('Forecast data:', forecast)
-    st.plotly_chart(plot_plotly(model,forecast))
+def main():
+    st.title('Seattle Weather Forecast App')
     
+    if 'data' not in st.session_state or 'models' not in st.session_state:
+        st.session_state.data, st.session_state.forecast_data = load_data()
+        st.session_state.models = load_models()
+        st.session_state.data, st.session_state.label_encoder = handle_data(st.session_state.data)
+    
+    if st.button('Refresh Data'):
+        st.session_state.data, st.session_state.forecast_data = load_data()
+        st.session_state.data, st.session_state.label_encoder = handle_data(st.session_state.data)
 
+    if st.session_state.data is not None:
+        st.download_button("Download Data", data=st.session_state.data.to_csv(), file_name='weather_data.csv', mime='text/csv')
 
-st.header('XGBoost Weather Condition Predition')
-predictions = xgb_prediction(data, label_encoder)
-if predictions is not None:
-    st.write('Predicted weather conditions:', predictions)
+        periods = st.slider('Select number of days to forecast', 1, 365, 30)
+        forecast(st.session_state.forecast_data, periods, st.session_state.models)
+        predict_weather_conditions(st.session_state.data, st.session_state.label_encoder, st.session_state.models)
 
-if st.button('Refreshing data...'):
-    data, forecast = load_data()
-    data, label_encoder = handle_data(data)
-    st.write('Weather data:', data)
+def forecast(forecast_data, periods, models):
+    if forecast_data is not None and 'Prophet_model' in models:
+        model = models['Prophet_model']
+        if model:
+            try:
+                future = model.make_future_dataframe(periods=periods)
+                forecast = model.predict(future)
+                st.write('Forecast data:', forecast)
+                st.plotly_chart(plot_plotly(model, forecast))
+            except Exception as e:
+                logging.error(f"Prophet prediction error: {e}")
+                st.error("Error during forecasting with Prophet.")
+
+def predict_weather_conditions(data, label_encoder, models):
+    if data is not None and 'xgb_model' in models:
+        model = models['xgb_model']
+        if model:
+            try:
+                X = data[['precipitation', 'wind_speed', 'dew_point', 'mean_temp', 'humidity', 'year', 'month']]
+                preds = model.predict(X)
+                st.write('Predicted weather conditions:', label_encoder.inverse_transform(preds))
+            except Exception as e:
+                logging.error(f"XGBoost prediction error: {e}")
+                st.error("Error predicting weather conditions.")
+
+if __name__ == "__main__":
+    main()
