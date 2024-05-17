@@ -1,4 +1,4 @@
-![](img/Seattle-Weather-.jpg)
+![](https://github.com/Omedobi/Seattle-weather-analysis-and-forcast/tree/481a39e8375ab3d1dc8a6d8b489b39a841a57189/img)
 
 # Seattle Weather Data Analysis and Forecasting
 This repository contains Python code for analyzing and forecasting weather data in Seattle. The code utilizes various libraries such as pandas, matplotlib.pyplot, seaborn, and plotly.express to perform data manipulation, visualization, and forecasting tasks.
