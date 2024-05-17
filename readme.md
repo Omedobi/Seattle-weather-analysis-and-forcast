@@ -74,7 +74,5 @@ Visualizations and metrics such as accuracy, precision, recall, and F1-score are
 
 Contributions to this project are welcome. Please fork the repository and submit a pull request with your enhancements.
 
-### Additional Recommendations
-
 - **Contact Information**: [![Email](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:ikennaanyawuike@gmail.com) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/anyawuike-ikenna)
 
