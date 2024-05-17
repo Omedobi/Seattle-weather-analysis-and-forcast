@@ -1,0 +1,13 @@
+plotly
+seaborn
+pandas
+prophet
+xgboost
+scikit-learn
+scipy
+numpy
+streamlit
+joblib
+logging
+fbprophet
+Cython
