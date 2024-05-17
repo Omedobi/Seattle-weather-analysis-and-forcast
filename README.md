@@ -1,3 +1,5 @@
+![](img\Seattle-Weather-forecasting.jpg)
+
 # Seattle Weather Data Analysis and Forecasting
 This repository contains Python code for analyzing and forecasting weather data in Seattle. The code utilizes various libraries such as pandas, matplotlib.pyplot, seaborn, and plotly.express to perform data manipulation, visualization, and forecasting tasks.
 
