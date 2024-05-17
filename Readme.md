@@ -1,4 +1,4 @@
-![seattle-weather]()
+![seattle-weather](img/Seattle-Weather-forecasting.jpg)
 
 # Seattle Weather Forecasting Project
 
