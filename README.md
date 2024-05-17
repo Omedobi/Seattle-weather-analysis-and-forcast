@@ -6,9 +6,12 @@ This project analyzes and predicts weather conditions in Seattle using a dataset
 
 ## Features
 
-- **Data Cleaning and Preprocessing**: The dataset is cleaned and preprocessed to fit the models' requirements.
-- **Exploratory Data Analysis (EDA)**: Visualizations to understand the data better.
-- **Forecasting**: Utilizing the Facebook Prophet model to forecast future weather conditions.
+- **Data Cleaning and Preprocessing**: The dataset is cleaned, manipulated to make more features. subsequently, preprocessed to fit the models' requirements.
+  
+- **Exploratory Data Analysis (EDA)**: Visualizations are generated using matplotlib.pyplot and plotly.express libraries. Line plots are created to visualize the humidity, wind speed, and mean temperature trends over a certain period. Scatter plots explore the relationship between temperature and humidity. Heatmaps and line plots analyze temperature changes over the years.
+  
+- **Forecasting**: Utilizing the Facebook Prophet model to forecast future weather conditions. The dataset is prepared by renaming columns and converting the date column to the required format. The Prophet model is trained on the data, and forecasts are made for future periods.
+  
 - **Classification**: Applying machine learning models to predict weather conditions based on historical data.
 - **Feature Importance Analysis**: Analyzing the importance of various features in the prediction models.
 
@@ -73,9 +76,5 @@ Contributions to this project are welcome. Please fork the repository and submit
 
 ### Additional Recommendations
 
-- **Example Outputs**: Include screenshots or additional output examples to show what users can expect.
-- **Detailed Descriptions**: More detailed descriptions of the functions and their purposes might be helpful.
-- **Credits and Acknowledgments**: If you used data or resources from somewhere, be sure to credit the original sources.
-- **Contact Information**: For users to reach out with questions or collaboration ideas.
+- **Contact Information**: [![Email](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:ikennaanyawuike@gmail.com) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/anyawuike-ikenna)
 
-This README template provides a comprehensive overview and guide for users to get started with your project effectively. Adjust the content as necessary to fit the specifics of your project or any additional sections you feel might be beneficial.
